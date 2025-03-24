@@ -1,1 +1,77 @@
+#  Kubernetes Failure Prediction - Phase 1  
+**Hackathon Project | AI-Powered Failure Detection for Kubernetes Clusters**  
+
+##  Introduction  
+Kubernetes clusters are prone to failures such as **pod crashes, resource exhaustion, and network disruptions**.  
+This project builds an **AI/ML model** that predicts Kubernetes failures **before they happen**, minimizing downtime and improving reliability.  
+
+---
+
+##  Dataset Overview  
+The dataset contains **100,000+ Kubernetes logs** with key system metrics:  
+
+Feature Name                      Description                                   Type
+CPU_Usage(%)             CPU utilization in percentage                       Continuous
+Memory_Usage(%)           Memory usage in percentage                         Continuous
+Disk_Usage(%)              Disk usage in percentage                          Continuous
+Network_IO(MB/s)            Network traffic in MB/s                          Continuous
+Error_Logs_Count         Number of error logs in a time                        Integer
+Pod_Status window        Categorical (Running, Failed, etc.)                   Encoded
+Issue_Label             Target variable (0 = No Issue, 1 =Issue)               Binary
+
+---
+
+##  Data Preprocessing  
+- **Dropped `Timestamp` column** (not needed for training).  
+- **Encoded `Pod_Status`** using `LabelEncoder`.  
+- **Standardized numerical features** using `StandardScaler`.  
+- **Balanced dataset using SMOTE** (to address class imbalance).  
+
+---
+
+##  Model Training & Selection  
+### **Models Used:**  
+✔ **Random Forest Classifier**  
+✔ **XGBoost Classifier**  
+
+Both models were trained and tuned using **hyperparameter optimization** to maximize accuracy.  
+
+---
+
+##  Model Performance  
+
+### **Original Test Data (100,000 samples)**  
+
+Model            | Accuracy | Precision | Recall | F1-Score |   
+Random Forest    | 99.95%   | 1.00      | 1.00   | 1.00     |  
+XGBoost          | 99.75%   | 1.00      | 1.00   | 1.00     |  
+
+**Feature Importance Analysis (SHAP & Random Forest Importance Plot)**  
+- **Key Features for Failure Prediction:**  
+  - CPU Usage  
+  - Memory Usage  
+  - Pod Status  
+  - Error Log Count  
+
+---
+
+## Testing on New Data (2,000 Records)  
+After training on **100,000 records**, the model was tested on **a different dataset of 2,000 records**.
+
+### ** Performance on New Test Data:**  
+
+ Model         | Accuracy | Precision   | Recall | F1-Score |     
+ Random Forest | 98.80%   |  99%        | 99%    | 99%      |  
+ XGBoost       | 93.30%   |  94%        | 93%    | 93%      |  
+
+🚀 **Random Forest performed the best**, maintaining high accuracy on unseen data.  
+
+---
+
+## How to Load & Use the Trained Models  
+The trained models are saved as `.pkl` files for easy reuse.  
+
+### ** Install Required Libraries**  
+```bash
+pip install pandas numpy scikit-learn joblib xgboost
 
